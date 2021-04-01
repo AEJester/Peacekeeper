@@ -54,6 +54,11 @@ class PeacekeeperCommand {
         embed.setTimestamp(Date.now());
         return embed;
     }
+    parseArgs(message) {
+        let args = message.content.split(" ");
+        args.shift();
+        return args;
+    }
 }
 exports.PeacekeeperCommand = PeacekeeperCommand;
 //# sourceMappingURL=PeacekeeperCommand.js.map

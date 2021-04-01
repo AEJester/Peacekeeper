@@ -80,4 +80,10 @@ export class PeacekeeperCommand {
         return embed;
     }
 
+    public parseArgs(message: Discord.Message): string[] {
+        let args = message.content.split(" ");
+        args.shift();
+        return args;
+    }
+
 }

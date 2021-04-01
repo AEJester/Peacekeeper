@@ -11,13 +11,31 @@ class HelpCommand extends PeacekeeperCommand_1.PeacekeeperCommand {
     execute(client, message, commandManager) {
         let succeeded = false;
         let embed = super.generate(message, `Displaying help for Peacekeeper`, Colors_1.Colors.BLUE);
+        let args = super.parseArgs(message);
+        let doesContainSpecicHelp = false;
+        if (args[0] != undefined)
+            doesContainSpecicHelp = true;
         commandManager.commands.forEach((command) => {
-            embed.addField(command.name, command.description, true);
-            embed.addField("Usage", command.usage, true);
-            embed.addField("Category", command.category, true);
+            if (doesContainSpecicHelp) {
+                if (command.command == args[0].toLowerCase()) {
+                    embed.addField(command.name, command.description, true);
+                    embed.addField("Usage", command.usage, true);
+                    embed.addField("Category", command.category, true);
+                }
+            }
+            else {
+                embed.addField(command.name, command.description, true);
+                embed.addField("Usage", command.usage, true);
+                embed.addField("Category", command.category, true);
+            }
         });
-        message.author.send({ embed });
-        message.channel.send({ embed: super.generate(message, `Check your direct messages for help.`, Colors_1.Colors.BLUE) });
+        if (!doesContainSpecicHelp) {
+            message.channel.send({ embed: super.generate(message, `Check your direct messages for help.`, Colors_1.Colors.BLUE) });
+            message.author.send({ embed });
+        }
+        else {
+            message.channel.send({ embed });
+        }
         succeeded = true;
         return succeeded;
     }
