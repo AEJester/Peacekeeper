@@ -1,0 +1,31 @@
+import * as Discord from "discord.js";
+import { Category } from "../../extra/Category";
+import { Colors } from "../../extra/Colors";
+import { CommandManager } from "./CommandManager";
+import { PeacekeeperCommand } from "./PeacekeeperCommand";
+
+export class HelpCommand extends PeacekeeperCommand {
+
+    constructor(name: string = "Help", description: string = "Displays the list of commands and how to use them.", command: string = "help", usage: string = "p!help <command>", category: Category = Category.HELP) {
+
+        super(name, description, command, usage, category);
+
+    }
+
+    public execute(client: Discord.Client, message: Discord.Message, commandManager: CommandManager): boolean {
+        let succeeded: boolean = false;
+
+        let embed: Discord.MessageEmbed = super.generate(message, `Displaying help for Peacekeeper`, Colors.BLUE);
+        commandManager.commands.forEach((command) => {
+            embed.addField(command.name, command.description, true);
+            embed.addField("Usage", command.usage, true);
+            embed.addField("Category", command.category, true);
+        });
+        message.author.send({ embed });
+        message.channel.send({ embed: super.generate(message, `Check your direct messages for help.`, Colors.BLUE) })
+        succeeded = true;
+
+        return succeeded;
+    }
+
+}
