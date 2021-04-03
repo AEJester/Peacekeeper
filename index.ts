@@ -16,6 +16,6 @@ const readEnv = (path: string): object => {
 
 let cfg = readEnv("./.env");
 
-const bot: PeacekeeperBot = new PeacekeeperBot("Peacekeeper", cfg["token"], cfg["prefix"])
+const bot: PeacekeeperBot = new PeacekeeperBot("Peacekeeper", cfg["token"], cfg["prefix"]);
 
 bot.start();

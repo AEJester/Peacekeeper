@@ -16,13 +16,35 @@ export class HelpCommand extends PeacekeeperCommand {
         let succeeded: boolean = false;
 
         let embed: Discord.MessageEmbed = super.generate(message, `Displaying help for Peacekeeper`, Colors.BLUE);
+        let args: string[] = super.parseArgs(message);
+
+        let doesContainSpecicHelp: boolean = false;
+
+        if (args[0] != undefined) doesContainSpecicHelp = true;
+
         commandManager.commands.forEach((command) => {
-            embed.addField(command.name, command.description, true);
-            embed.addField("Usage", command.usage, true);
-            embed.addField("Category", command.category, true);
+            
+            if (doesContainSpecicHelp) {
+                if (command.command == args[0].toLowerCase()) {
+                    embed.addField(command.name, command.description, true);
+                    embed.addField("Usage", command.usage, true);
+                    embed.addField("Category", command.category, true);
+                }
+            } else {
+                embed.addField(command.name, command.description, true);
+                embed.addField("Usage", command.usage, true);
+                embed.addField("Category", command.category, true);
+            }
+            
         });
-        message.author.send({ embed });
-        message.channel.send({ embed: super.generate(message, `Check your direct messages for help.`, Colors.BLUE) })
+
+        if (!doesContainSpecicHelp) {
+            message.channel.send({ embed: super.generate(message, `Check your direct messages for help.`, Colors.BLUE) });
+            message.author.send({ embed });
+        } else {
+            message.channel.send({ embed });
+        }
+
         succeeded = true;
 
         return succeeded;
